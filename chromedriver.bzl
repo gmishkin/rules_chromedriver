@@ -24,9 +24,16 @@ def chromedriver_deps():
 
 def _impl(rctx):
     rctx.report_progress("Fetching Chromium version")
-    result = rctx.execute(["chromium", "--version"])
+    chrome_path = rctx.which("chrome")
+    if chrome_path == None:
+        chrome_path = rctx.which("chromium")
+
+    if chrome_path == None:
+        fail("Neither chrome nor chromium were found in your PATH")
+
+    result = rctx.execute([chrome_path, "--version"])
     if result.return_code != 0:
-        fail("Chromium version fetching failed", result.stderr)
+        fail("Chrom{e,ium} version fetching failed", result.stderr)
 
     output = result.stdout.rstrip()
     words = output.split(" ", 3)
@@ -84,4 +91,5 @@ chromedriver = repository_rule(
     attrs = {
         "_dr_build": attr.label(default = "//:chromedriver.BUILD"),
     },
+    environ = ["PATH"],
 )
