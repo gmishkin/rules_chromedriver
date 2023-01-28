@@ -29,20 +29,23 @@ def chromedriver_deps():
 
 def _impl(rctx):
     rctx.report_progress("Fetching Chrome version")
-    chrome_path = rctx.which("chrome")
-    if chrome_path == None:
-        chrome_path = rctx.which("chromium")
+    if rctx.os.name == "mac os x":
+        chrome_path = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+    else:
+        chrome_path = rctx.which("chrome")
+        if chrome_path == None:
+            chrome_path = rctx.which("chromium")
 
-    if chrome_path == None:
-        fail("Neither chrome nor chromium were found in your PATH")
+        if chrome_path == None:
+            fail("Neither chrome nor chromium were found in your PATH")
 
     result = rctx.execute([chrome_path, "--version"])
     if result.return_code != 0:
         fail("Chrom{e,ium} version fetching failed", result.stderr)
 
     output = result.stdout.rstrip()
-    words = output.split(" ", 3)
-    full_version = words[1]
+    words = output.split(" ")
+    full_version = [word for word in words if word[0].isdigit()][0]
 
     version_parts = full_version.split(".", 4)
     important_version_parts = ".".join(version_parts[0:3])
