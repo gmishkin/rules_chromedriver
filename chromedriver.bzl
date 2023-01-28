@@ -37,7 +37,7 @@ def _impl(rctx):
 
     rctx.report_progress("Fetching latest ChromeDriver version")
     latest_url_query = "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_" + important_version_parts
-    rctx.download(url=latest_url_query, output="chromedriver_version_file.txt")
+    rctx.download(url = latest_url_query, output = "chromedriver_version_file.txt")
     chromedriver_version = rctx.read("chromedriver_version_file.txt")
 
     driver_download_rule_snippets = ["""    http_archive(
@@ -45,35 +45,35 @@ def _impl(rctx):
         urls = ["https://chromedriver.storage.googleapis.com/{version}/chromedriver_{platform}.zip"],
         build_file = "@{name}//:chromedriver.BUILD",
     )
-""".format(name = rctx.name, platform=platform, version=chromedriver_version) for platform in ["linux64", "mac64", "mac_arm64"]]
+""".format(name = rctx.name, platform = platform, version = chromedriver_version) for platform in ["linux64", "mac64", "mac_arm64"]]
 
     driver_download_rule_snippets.append("""    http_archive(
         name = "{name}_win32",
         urls = ["https://chromedriver.storage.googleapis.com/{version}/chromedriver_win32.zip"],
         build_file = "@{name}//:chromedriver_win.BUILD",
     )
-""".format(name=rctx.name, version=chromedriver_version))
+""".format(name = rctx.name, version = chromedriver_version))
 
-    rctx.file("chromedriver.BUILD", content="""filegroup(
+    rctx.file("chromedriver.BUILD", content = """filegroup(
     name = "driver",
     srcs = ["chromedriver"],
     visibility = ["@{name}//:__pkg__"],
 )
-""".format(name=rctx.name))
+""".format(name = rctx.name))
 
-    rctx.file("chromedriver_win32.BUILD", content="""filegroup(
+    rctx.file("chromedriver_win32.BUILD", content = """filegroup(
     name = "driver",
     srcs = ["chromedriver.exe"],
     visibility = ["@{name}//:__pkg__"],
 )
-""".format(name=rctx.name))
+""".format(name = rctx.name))
 
     repos_header = """load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 def chromedriver_builds():
 """
 
-    rctx.file("repos.bzl", content=repos_header + "".join(driver_download_rule_snippets))
+    rctx.file("repos.bzl", content = repos_header + "".join(driver_download_rule_snippets))
 
     rctx.file("BUILD", rctx.read(rctx.attr._dr_build))
 

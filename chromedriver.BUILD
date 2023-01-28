@@ -3,22 +3,34 @@ load("@bazel_skylib//lib:selects.bzl", "selects")
 
 selects.config_setting_group(
     name = "linux64",
-    match_all = ["@platforms//cpu:x86_64", "@platforms//os:linux"],
+    match_all = [
+        "@platforms//cpu:x86_64",
+        "@platforms//os:linux",
+    ],
 )
 
 selects.config_setting_group(
     name = "mac64",
-    match_all = ["@platforms//cpu:x86_64", "@platforms//os:macos"],
+    match_all = [
+        "@platforms//cpu:x86_64",
+        "@platforms//os:macos",
+    ],
 )
 
 selects.config_setting_group(
     name = "mac_arm64",
-    match_all = ["@platforms//cpu:arm64", "@platforms//os:macos"],
+    match_all = [
+        "@platforms//cpu:arm64",
+        "@platforms//os:macos",
+    ],
 )
 
 selects.config_setting_group(
     name = "win32",
-    match_all = ["@platforms//cpu:x86_64", "@platforms//os:windows"],
+    match_all = [
+        "@platforms//cpu:x86_64",
+        "@platforms//os:windows",
+    ],
 )
 
 native_binary(
