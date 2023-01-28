@@ -1,0 +1,6 @@
+{
+  "type": "auto",
+  "mode": "check",
+  "lint": "warn",
+  "warningsList": ["all"]
+}

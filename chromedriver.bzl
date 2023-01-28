@@ -1,5 +1,10 @@
-load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
+"""
+Repository rule to load the matching version of ChromeDriver for the version
+of Chrome or Chromium you have installed in your PATH
+"""
+
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
 
 def chromedriver_deps():
     maybe(
