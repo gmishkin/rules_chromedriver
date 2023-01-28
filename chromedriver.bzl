@@ -28,7 +28,7 @@ def chromedriver_deps():
     )
 
 def _impl(rctx):
-    rctx.report_progress("Fetching Chromium version")
+    rctx.report_progress("Fetching Chrome version")
     chrome_path = rctx.which("chrome")
     if chrome_path == None:
         chrome_path = rctx.which("chromium")
