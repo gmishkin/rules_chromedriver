@@ -1,0 +1,14 @@
+name: lint
+on:
+  push:
+    branches:
+    - main
+
+jobs:
+  lint:
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Run buildifier
+      uses: jbajic/buildifier@v1.0.1
+      with:
+        buildifier-version: "6.0.0"
