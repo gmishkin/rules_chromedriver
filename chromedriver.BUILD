@@ -39,7 +39,11 @@ native_binary(
         ":linux64": "@chromedriver_linux64//:driver",
         ":mac64": "@chromedriver_mac64//:driver",
         ":mac_arm64": "@chromedriver_mac_arm64//:driver",
+        ":win32": "@chromedriver_win32//:driver",
     }),
-    out = "chromedriver",
+    out = select({
+        ":win32": "chromedriver.exe",
+        "//conditions:default": "chromedriver",
+    }),
     visibility = ["//visibility:public"],
 )
