@@ -28,6 +28,8 @@ def chromedriver_deps():
     )
 
 def _impl(rctx):
+    rctx.file("BUILD.bazel", rctx.read(rctx.attr._dr_build))
+
     rctx.report_progress("Fetching Chrome version")
     if rctx.os.name == "mac os x":
         chrome_path = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
@@ -37,7 +39,11 @@ def _impl(rctx):
             chrome_path = rctx.which("chromium")
 
         if chrome_path == None:
-            fail("Neither chrome nor chromium were found in your PATH")
+            print("Neither chrome nor chromium were found in your PATH")
+            rctx.file("repos.bzl", content = """def chromedriver_builds():
+    pass
+""")
+            return
 
     result = rctx.execute([chrome_path, "--version"])
     if result.return_code != 0:
@@ -89,8 +95,6 @@ def chromedriver_builds():
 """
 
     rctx.file("repos.bzl", content = repos_header + "".join(driver_download_rule_snippets))
-
-    rctx.file("BUILD", rctx.read(rctx.attr._dr_build))
 
 chromedriver = repository_rule(
     implementation = _impl,
